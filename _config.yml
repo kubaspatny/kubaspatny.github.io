@@ -1,6 +1,6 @@
 # Dependencies
 markdown:         redcarpet
-highlighter:      rouge
+highlighter:      pygments
 
 
 # Permalinks
@@ -24,3 +24,6 @@ version:          2.0.0
 github:
   repo:           https://github.com/poole/hyde
 excerpt_separator: <!--more-->
+
+safe: true
+lsi: false
