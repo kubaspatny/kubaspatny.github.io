@@ -1,0 +1,26 @@
+# Dependencies
+markdown:         redcarpet
+highlighter:      rouge
+
+
+# Permalinks
+permalink:        pretty
+
+# Setup
+title:            Kuba Spatny
+tagline:          'Kuba Spatny'
+description:      'Software Engineering student. Prague, Czech Republic'
+url:              localhost:4000
+
+author:
+  name:           'Kuba Spatny'
+  url:            https://twitter.com/kubaspatny
+
+paginate:         5
+
+# Custom vars
+version:          2.0.0
+
+github:
+  repo:           https://github.com/poole/hyde
+excerpt_separator: <!--more-->
