@@ -19,7 +19,7 @@ As you can see, the background of the `ViewPager` animates gradually, so you can
 
 First you have to set up an `Activity` (in my case `FragmentActivity` for compatibility) with the `ViewPager`.
 
-{% highligh java %}
+{% highlight java %}
 
 public class MainActivity extends FragmentActivity {
 SectionsPagerAdapter mSectionsPagerAdapter;
