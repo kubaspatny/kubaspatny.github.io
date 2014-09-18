@@ -267,6 +267,15 @@ a.sidebar-nav-item:focus {
   margin: 2rem 0;  
 }
 
+.post-divider-index {
+  border-top: 1px dotted #BABABA;
+  color: #fff;
+  background-color: #fff;
+  height: 1px;
+  width:120%;
+  margin: 2rem 0 0;  
+}
+
 .postend {
 	margin: 6rem 0 2rem;	
 }
