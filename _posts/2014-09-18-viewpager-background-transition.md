@@ -58,9 +58,9 @@ The only remaining problems are:
 * Determining the right color of the background while swiping if we know the color of *Page A* and the color of *page B*.
 * Updating the background color while swiping.
 
-### Calculating the right color
+### Solution #1 - using the ValueAnimator
 
-To determine the right color, which is a blend of *Color A* and *Color B*, I decided to use the `ValueAnimator` of `ArgbEvaluator` object.
+To determine the right color, which is a blend of *Color A* and *Color B*, I at first decided to use the `ValueAnimator` of `ArgbEvaluator` object.
 
 `ValueAnimator` does all the job of calculating the correct color over time for you. You only have to pass the colors you want to iterate over - in my case 3, because my `SectionsPagerAdapter` returns only 3 pages.
 
@@ -95,7 +95,7 @@ To explain the magic number *10000000000l*, `setDuration()` method only accepts 
 
 Normally when using `ValueAnimator` you would set the duration and start the animation by calling `ValueAnimator#start()`, but we're only going to use the animator for determining the right color in each state of swiping between pages.
 
-### Determining which page is shown
+---
 
 To calculate the color we need to know what is the `ViewPager` currently showing. To do that we create our listener that implements `ViewPager.OnPageChangeListener`.
 
@@ -118,9 +118,39 @@ Therefore, by using the formula *((positionOffset + position) *  10000000000l))*
 
 The last step already showed in the code above is to call `ValueAnimator#setCurrentPlayTime()` which will set the current position of the animation and will also trigger an animation update which will call our listener that will update our `ViewPager` background.
 
-### Room for improvement
+### Solution #2 - getting rid of the ValueAnimator
 
-The code above will work, although there's still room for improvement. The main problem is specifying the number of pages in code. To overcome that, I would recommend using `FragmentPagerAdapter`'s method `getCount()` to determine that number. That would be essential especially when you don't know the number of pages beforehand.
+The `ValueAnimator`'s use wasn't at all necessary. Using `ArgbEvaluator` directly will produce a cleaner code, but you'll have to check for some boundary cases.
+
+Each time we're going to call `ArgbEvaluator.evaluate()`, we're going to need to pass the 2 colors we want to blend. That means we have to keep an array of all the colors;
+
+{% highlight java %}
+
+Integer[] colors = {color1, color2, color3};
+
+{% endhighlight %}
+
+Unlike in the first solution, we'll set the color of the background right in the `ViewPager.OnPageChangeListener`.
+
+{% highlight java %}
+@Override
+public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+      if(position < (mSectionsPagerAdapter.getCount() -1) && position < (colors.length - 1)) {
+
+           mViewPager.setBackgroundColor((Integer) argbEvaluator.evaluate(positionOffset, colors[position], colors[position + 1]));
+
+      } else {
+
+           mViewPager.setBackgroundColor(colors[colors.length - 1]);
+
+      }
+}
+{% endhighlight %}
+
+As you can see, we have to check for the last page to avoid `OutOfBoundsException`. However we can skip all the hassle with converting floats to ints and setting the Animators length.
+
+This approach will even work for cases where you supply an array with less colors than actual pages. For those pages the last color will always be set.
 
 ### Sample App
 
